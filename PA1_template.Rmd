@@ -1,25 +1,72 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
+title: "RR_1"
+author: "SS"
+date: "Thursday, August 06, 2015"
+output: html_document
 ---
 
+Loading the data
+```{r}
+setwd("~/GitHub/RepData_PeerAssessment1/activity")
+data1 <- read.csv("activity.csv")
+```
 
-## Loading and preprocessing the data
+Processing data to get rid of missing values
+```{r}
+data2 <- na.omit(data1)
+head(data2)
+```
+Mean total number of Steps taken per day 
+The following code uses the dplyr package to group data and then calculates the total number of steps taken per day. 
+```{r}
+library(dplyr)
+daily <-  group_by(data2, date)
+t <- summarise(daily, total1 = sum(steps))
+```
+
+Histogram of of total number of steps taken each day.
+
+```{r}
+hist(t$total1)
+```
+Calculating and reporting the mean and median of the total number of steps taken per day.
+```{r}
+mean1 <- mean(t$total1)
+mean1
+median1 <- median(t$total1)
+median1
+```
+The mean of total number of steps taken per day is mean1
+
+The median of total number of steps taken per day is median1
+
+
+Aveage Daily Activity Pattern
+Making  a time-series plot of the 5-minute interval and the average number of steps taken, averaged across all days.
+```{r}
+interval <-  group_by(data2, interval)
+i <- summarise(interval, avg = mean(steps))
+head(i)
+plot(i$interval, i$avg, type = "l", xlab = "Interval", ylab = "Average Number of Steps", col = "blue", lwd = 2)
+```
+Calculating and reporting the interval containing the maximum number of steps.
+```{r}
+max_steps = i[(which.max(i$avg)),]$interval
+max_steps
+```
+The interval containg the maximum number of steps is max_steps.
+
+
+Imputing missing values
+
+Calculating and reporting the total number of missing values in the dataset.
+
+```{r}
+sum(is.na(data1$steps))
+```
+The total number of missing values is ...
+
+Filling in the missing values
 
 
 
-## What is mean total number of steps taken per day?
-
-
-
-## What is the average daily activity pattern?
-
-
-
-## Imputing missing values
-
-
-
-## Are there differences in activity patterns between weekdays and weekends?
